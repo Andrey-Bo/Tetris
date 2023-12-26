@@ -1,21 +1,39 @@
-﻿Console.SetWindowSize(40, 30);
+﻿using System.Runtime.CompilerServices;
+using Tetris;
+
+Console.SetWindowSize(40, 30);
 Console.SetBufferSize(40, 30);
 
-int x1 = 2;
-int y1 = 3;
-char c1 = '*';
-Draw(x1, y1, c1);
+FigureGenerator generator = new FigureGenerator(20, 0, '*');
+Figure figure = generator.GetNewFigure();
 
-int x2 = 5;
-int y2 = 8;
-char c2 = '*';
-Draw(x2, y2, c2);
-
+while (true)
+{
+    if (Console.KeyAvailable)
+    { 
+        ConsoleKeyInfo key = Console.ReadKey();
+        HandleKey(figure, key);
+    }
+}
 
 Console.ReadKey();
 
-static void Draw(int x, int y, char c)
+
+static void HandleKey(Figure fig, ConsoleKeyInfo key)
 {
-    Console.SetCursorPosition(x, y);
-    Console.Write(c);
+    switch (key.Key)
+    {
+        case ConsoleKey.LeftArrow:
+            fig.TryMove(Direction.LEFT);
+            break;
+        case ConsoleKey.RightArrow:
+            fig.TryMove(Direction.RIGHT);
+            break;
+        case ConsoleKey.DownArrow:
+            fig.TryMove(Direction.DOWN);
+            break;
+        case ConsoleKey.Spacebar:
+            fig.Rotate();
+            break;
+    }
 }
