@@ -18,6 +18,6 @@ namespace Tetris
             Draw();
         }
 
-        public override void Rotate(Point[] points){}
+        public override void Rotate(){}
     }
 }

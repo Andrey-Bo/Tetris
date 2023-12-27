@@ -19,62 +19,41 @@ namespace Tetris
             }
         }
 
-        private Point[] Clone()
-        {
-            Point[] newPoints = new Point[F_LEN];
-            for (int i=0; i < F_LEN; i++)
-            { newPoints[i] = new Point(Points[i]); }
-            return newPoints;
-
-        }
-
         public Result TryMove(Direction dir)
         {
             Hide();
-            Point[] clone = Clone();
-            Move(clone, dir);
-            var result = VerifyPosition(clone);
-            if(result==Result.SUCCESS)
-                Points = clone;
+            Move(dir);
+            var result = VerifyPosition();
+            if(result!=Result.SUCCESS)
+                Move(Reverse(dir));
 
             Draw();
             return result;
         }
 
-        public void Move(Point[] pList,Direction dir)
-        {
-            foreach (Point p in pList)
-            {
-                p.Move(dir);
-            }
-        }
-
         public void Move(Direction dir)
         {
-            Hide();
             foreach (Point p in Points)
             {
                 p.Move(dir);
             }
-            Draw();
         }
 
         public Result TryRotate()
         {
             Hide();
-            Point[] clone = Clone();
-            Rotate(clone);
-            var result = VerifyPosition(clone);
-            if(result==Result.SUCCESS)
-                Points = clone;
+            Rotate();
+            var result = VerifyPosition();
+            if(result!=Result.SUCCESS)
+                Rotate();
 
             Draw();
             return result;
         }
 
-        private Result VerifyPosition(Point[] pList)
+        private Result VerifyPosition()
         {
-            foreach (Point p in pList)
+            foreach (Point p in Points)
             {
                 if (p.y >= Field.Height)
                     return Result.DOWN_BORDER_STRIKE;
@@ -100,7 +79,19 @@ namespace Tetris
             return Points[0].y == 0;
         }
 
-        public abstract void Rotate(Point[] points);
+        Direction Reverse(Direction dir)
+        {
+            switch (dir)
+            {
+                case Direction.LEFT: return Direction.RIGHT;
+                case Direction.RIGHT: return Direction.LEFT;
+                case Direction.DOWN: return Direction.UP;
+                case Direction.UP: return Direction.DOWN;
+            }
+            return dir;
+        }
+
+        public abstract void Rotate();
 
     }
 }
