@@ -13,6 +13,13 @@ namespace Tetris
 
         public Point() { }
 
+        public Point(Point p) 
+        {
+            x = p.x;
+            y = p.y;
+            c = p.c;
+        }
+
         public Point(int _x,int _y,char _c)
         {
             x= _x;
@@ -23,8 +30,10 @@ namespace Tetris
 
         public void Draw()
         {
+            Console.CursorVisible = false;
             Console.SetCursorPosition(x, y);
             Console.Write(c);
+            Console.SetCursorPosition(0, 0);
         }
 
         public void Hide()
